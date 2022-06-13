@@ -25,7 +25,9 @@ const Post = ({
   postId,
   caption,
   detail,
-  postImage,
+  carName,
+  money,
+  postImage,timeSlots,
   likes = [],
   comments = [],
   ownerImage,
@@ -43,6 +45,7 @@ const Post = ({
   const [detailValue, setDetailValue] = useState(detail);
   const [detailToggle, setDetailToggle] = useState(false);
 
+  
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
@@ -68,7 +71,6 @@ const Post = ({
       dispatch(getFollowingPosts());
     }
   };
-
   const updateCaptionHandler = (e) => {
     e.preventDefault();
     dispatch(updatePost(captionValue, postId));
@@ -126,16 +128,41 @@ const Post = ({
         >
           {caption}
         </Typography>
+        
         <Typography
-          class='detail'
           fontWeight={100}
           color="rgba(0, 0, 0, 0.582)"
           style={{ alignSelf: "center" }}
         >
-         
+       
         </Typography>
+        
       </div>
-
+      <div>Ten xe: 
+        <Typography
+          fontWeight={500}
+          color="rgba(0, 0, 0, 0.582)"
+          style={{ alignSelf: "center" }}
+        >
+          {carName}
+        </Typography></div>
+      <div>Chi tiết về xe: <Typography
+          
+          fontWeight={100}
+          color="rgba(0, 0, 0, 0.582)"
+          style={{ alignSelf: "center" }}
+        >
+         {detail}
+        </Typography></div>
+        <div>
+        <Typography
+          fontWeight={500}
+          color="rgba(0, 0, 0, 0.582)"
+          style={{ alignSelf: "center" }}
+        >
+          Giá thuê xe/Ngày: {money} VND
+        </Typography>
+        </div>
       <button
         style={{
           border: "none",

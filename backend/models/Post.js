@@ -5,11 +5,17 @@ const postSchema = new mongoose.Schema({
 
   detail: String,
 
+  carName: String,
+
   image: {
     public_id: String,
     url: String,
   },
-
+  timeSlots: {
+    to: {type: String},
+    from: {type: String},
+  },
+  money: Number,
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -38,6 +44,8 @@ const postSchema = new mongoose.Schema({
       },
     },
   ],
-});
+},
+{ timestamps: true }
+);
 
 module.exports = mongoose.model("Post", postSchema);

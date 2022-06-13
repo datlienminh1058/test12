@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, InputAdornment, TextField, Typography } from "@mui/material";
 import Dropdown from 'react-dropdown';
 import React, { useEffect, useState } from "react";
 import { useAlert } from "react-alert";
@@ -7,19 +7,23 @@ import { createNewPost } from "../../Actions/Post";
 import { loadUser } from "../../Actions/User";
 import "./NewPost.css";
 import './DayPicker.css'
+import moment from "moment";
+import {DatePicker, Space} from 'antd'
 
-import {DayPicker} from 'react-daypicker';
-
-
+const {RangePicker} = DatePicker
 
 const NewPost = () => {
   const [image, setImage] = useState(null);
   const [caption, setCaption] = useState("");
   const [detail, setDetail] = useState("");
-  const [time, setTime] = useState(new Date());
+  const [to, setTo] = useState("");
+  const [from, setFrom] = useState();
+  const [carName, setCarName] = useState("");
   const { loading, error, message } = useSelector((state) => state.like);
+  const [money,setMoney] = useState("");
   const dispatch = useDispatch();
   const alert = useAlert();
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -36,7 +40,7 @@ const NewPost = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await dispatch(createNewPost(caption, image, detail, time));
+    await dispatch(createNewPost(caption, image, detail, to, from,money, carName));
     dispatch(loadUser());
   };
 
@@ -52,7 +56,15 @@ const NewPost = () => {
     }
   }, [dispatch, error, message, alert]);
 
+  function selectTimeslots(values) {
+    // setTo(moment(values[0]));
+    setTo(moment(values[0]).format('MMM DD yyyy'))
+    // setFrom(moment(values[1]));
+    setFrom(moment(values[1]).format('MMM DD yyyy'))
 
+    }
+
+    
   return (
     
     <div className="newPost">
@@ -68,12 +80,32 @@ const NewPost = () => {
           onChange={(e) => setCaption(e.target.value)}
         />
         <input
+          type="text"
+          placeholder="Ten xe"
+          value={carName}
+          onChange={(e) => setCarName(e.target.value)}
+        />
+        <input
         type="text"
         placeholder="Detail..."
         value={detail}
         onChange={(e) => setDetail(e.target.value)}
         />
-        <DayPicker value={time} onChange={(e) => setTime(e.target.value)}/>
+        <input
+          type="number"
+          placeholder="Tien Te"
+          value={money}
+          onChange={(e) => setMoney(e.target.value)}
+        />
+        
+
+        <Space direction="vertical" size={12}>Thoi gian cho thue
+        <RangePicker format='MMM DD yyyy HH:mm' onChange={selectTimeslots} />
+        </Space>
+        
+        <Button disabled={loading} type="submit">
+          Post
+        </Button>
       </form>
     </div>
   );

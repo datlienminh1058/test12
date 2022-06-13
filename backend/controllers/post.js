@@ -8,11 +8,15 @@ exports.createPost = async (req, res) => {
     });
     const newPostData = {
       caption: req.body.caption,
+      money: req.body.money,
       detail: req.body.detail,
+      carName: req.body.carName,
       image: {
         public_id: myCloud.public_id,
         url: myCloud.secure_url,
       },
+      timeSlots: req.body.timeSlots,
+      money: req.body.money,
       owner: req.user._id,
     };
 
