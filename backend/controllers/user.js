@@ -356,7 +356,7 @@ exports.getUserProfile = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({
-      name: { $regex: req.query.name, $options: "i" },
+      name: { $regex : req.query.name, $options: "i" },
     });
 
     res.status(200).json({
@@ -485,7 +485,7 @@ exports.getMyPosts = async (req, res) => {
 
 exports.getUserPosts = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.params.id);
 
     const posts = [];
 
@@ -510,7 +510,7 @@ exports.getUserPosts = async (req, res) => {
 
 exports.getAllUsersChat = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params._id);
     
     const friends = await Promise.all(
       user.following.map((friendId) => {

@@ -122,12 +122,10 @@ exports.likeAndUnlikePost = async (req, res) => {
 
 exports.getPostOfFollowing = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.name);
 
     const posts = await Post.find({
-      owner: {
-        $in: user.following,
-      },
+      user,
     }).populate("owner likes comments.user");
 
     res.status(200).json({
@@ -161,6 +159,11 @@ exports.updateCaption = async (req, res) => {
     }
 
     post.caption = req.body.caption;
+    post.detail = req.body.detail;
+    post.carName = req.body.carName;
+    post.money = req.body.money;
+    post.timeSlots = req.body.timeSlots;
+    
     await post.save();
     res.status(200).json({
       success: true,

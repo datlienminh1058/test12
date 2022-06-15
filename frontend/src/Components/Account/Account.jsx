@@ -67,9 +67,9 @@ const Account = () => {
               caption={post?.caption}
               detail={post?.detail}
               timeSlots={post?.timeSlots}
-              to={post?.to}
+              // to={post?.to}
               money={post?.money}
-              from={post?.from}
+              // from={post?.from}
               carName={post?.carName}
               postImage={post?.image.url}
               likes={post?.likes}

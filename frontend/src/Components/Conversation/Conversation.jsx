@@ -8,35 +8,37 @@ import './Conversation.css'
 
 export default function Conversation({ conversation, currentUser }) {
 
-  const {user} = useSelector((state) => state.user);
+  const {users} = useSelector((state) => state.user);
+  // const setUser = ([]);
+  const [user, setUser] = useState([]);
 
 
   useEffect(() => {
-    const friendId = conversation.members.find((m) => m !== currentUser._id);
+    const friendId = conversation.members.find((m) => m !== currentUser?._id);
 
     const getUser = async () => {
       try {
-        const res = await axios.get(`/api/v1/user/${friendId}`);
-        // setUser(res.data);
+        const res = await axios.get('/api/v1/user/' + users?._id);
+        setUser(res.data);
       }
 
       catch (err) {
         console.error(err);
       }
     }
-    getUser();
+    // getUser();
   }, [currentUser, conversation]);
 
   return (
-    <div className="conversation">
+    <div className="">
       
       
-              <img
+              {/* <img
               className="conversationImg"
               src={user.avatar?.url}
               alt='' />
               <span className="conversationName">{user.name}</span>
-              
+               */}
       
     </div>
   )

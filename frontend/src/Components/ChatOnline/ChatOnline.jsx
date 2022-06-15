@@ -5,6 +5,7 @@ import {getAllUsers} from '../../Actions/User'
 import { useDispatch, useSelector } from "react-redux";
 import User from "../User/User"
 import { Button, Typography } from "@mui/material";
+import { createConversation, get2ConversationUsers } from "../../Actions/Conversation";
 
 const ChatOnline = ({onlineUsers, currentId, setCurrentChat}) => {
   const [friends, setFriends] = useState([]);
@@ -13,7 +14,7 @@ const ChatOnline = ({onlineUsers, currentId, setCurrentChat}) => {
 
   useEffect(() => {
     const getFriends = async () => {
-      const res = await axios.get(`/api/v1/user/friends/${currentId}`);
+      const res = await axios.get(`/api/v1/user/${currentId}`);
       setFriends(res.data);
     };
 
@@ -33,8 +34,26 @@ const ChatOnline = ({onlineUsers, currentId, setCurrentChat}) => {
 
   const handleClick = async (user) => {
     try {
+      
       const res = await axios.get(`/api/v1/conversations/find/${currentId}/${user?._id}`);
+      // const res = await dispatch(createConversation(currentId,user._id));
+
       setCurrentChat(res.data);
+      // console.log(res.data);
+
+      // const ress = await axios.get(`/api/v1/conversations/${res.data_id}`);
+      // console.log(ress.data);
+      // if((res.data) == null){
+      //   const q = user?._id;
+      //   const res = await axios.post(`/api/v1/conversations`,{q, currentId});
+      //   setCurrentChat(res.data);
+      //   console.log('hello');
+      // } else{
+      // const res = await axios.get(`/api/v1/conversations/find/${currentId}/${user?._id}`);
+      // setCurrentChat(res.data);
+      //   console.log('asdxcv');
+      // }
+
     } catch (error) {
       console.log(error);
     }

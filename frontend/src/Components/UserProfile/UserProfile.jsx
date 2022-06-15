@@ -95,8 +95,8 @@ const UserProfile = () => {
               postId={post?._id}
               caption={post?.caption}
               detail={post?.detail}
-              to={post?.to}
-              from={post?.from}
+              // to={post?.to}
+              // from={post?.from}
               timeSlots={post?.timeSlots}
               money={post?.money}
               carName={post?.carName}

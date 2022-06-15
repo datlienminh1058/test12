@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: 'Online',
+    default: 'Offline',
   },
 
   posts: [

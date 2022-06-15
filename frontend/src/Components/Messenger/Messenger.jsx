@@ -18,14 +18,14 @@ const Messenger = () => {
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const socket = useRef();
+  const socket =  useRef();
   // const {user} = useContext(AuthContext);
   const {user} = useSelector((state) => state.user);
   const scrollRef = useRef();
-
-  useEffect(() => {
+<script src="/socket.io/socket.io.js"></script>
+  useEffect(() => { 
     socket.current = io("ws://localhost:8900");
-    socket.current.on("getMessage", (data) => {
+    socket.current.on("getMessage", data => {
       setArrivalMessage({
         sender: data.senderId,
         text: data.text,
@@ -33,7 +33,6 @@ const Messenger = () => {
       });
     });
   }, []);
-
 
 
   useEffect(() => {
@@ -50,12 +49,12 @@ const Messenger = () => {
       );
     });
   }, [user]);
-
   useEffect(() => {
     const getConversations = async () => {
       try {
         const res = await axios.get("/api/v1/conversations/" + user?._id);
         setConversations(res.data);
+        
       } catch (err) {
         console.log(err);
       }
@@ -68,6 +67,7 @@ const Messenger = () => {
       try {
         const res = await axios.get("/api/v1/messages/" + currentChat?._id);
         setMessages(res.data);
+        
       } catch (err) {
         console.log(err);
       }
@@ -78,17 +78,17 @@ const Messenger = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const message = {
+     const message = {
       sender: user._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
 
     const receiverId = currentChat.members.find(
-      (member) => member !== user._id
+      (member) => member !== user?._id
     );
 
-    socket.current.emit("sendMessage", {
+    await socket.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
       text: newMessage,

@@ -20,14 +20,22 @@ import {
 import { getFollowingPosts, getMyPosts, loadUser } from '../../Actions/User';
 import User from "../User/User";
 import CommentCard from "../CommentCard/CommentCard";
+import moment from "moment";
+import MobileScreenShareTwoToneIcon from '@mui/icons-material/MobileScreenShareTwoTone';
+import { createConversation, get2ConversationUsers } from "../../Actions/Conversation";
+import Messenger from "../../Components/Messenger/Messenger";
+import {Col, DatePicker, Row, Space} from 'antd'
+import 'antd/dist/antd.css';
+import axios from "axios";
+const {RangePicker} = DatePicker
 
 const Post = ({
   postId,
   caption,
   detail,
   carName,
-  money,
-  postImage,timeSlots,
+  money,to,from,timeSlots,
+  postImage,
   likes = [],
   comments = [],
   ownerImage,
@@ -35,6 +43,7 @@ const Post = ({
   ownerId,
   isDelete = false,
   isAccount = false,
+  setCurrentChat,
 }) => {
   const [liked, setLiked] = useState(false);
   const [likesUser, setLikesUser] = useState(false);
@@ -43,9 +52,14 @@ const Post = ({
   const [captionValue, setCaptionValue] = useState(caption);
   const [captionToggle, setCaptionToggle] = useState(false);
   const [detailValue, setDetailValue] = useState(detail);
-  const [detailToggle, setDetailToggle] = useState(false);
+  const [carNameValue, setCarNameValue] = useState(carName);
+  const [moneyValue, setMoneyValue] = useState(money);
+  // const [timeSlotsValue, setTimeSlotsValue] = useState(timeSlots);
+  const [toValue, setToValue] = useState(to);
+  const [fromValue, setFromValue] = useState(from);
 
   
+ 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
@@ -61,6 +75,13 @@ const Post = ({
     }
   };
 
+  const messageHandler = async (e) =>{
+    e.preventDefault();
+    await dispatch(createConversation(user._id,ownerId));
+    await dispatch(get2ConversationUsers(user._id,ownerId));
+    
+  }
+
   const addCommentHandler = async (e) => {
     e.preventDefault();
     await dispatch(addCommentOnPost(postId, commentValue));
@@ -73,7 +94,7 @@ const Post = ({
   };
   const updateCaptionHandler = (e) => {
     e.preventDefault();
-    dispatch(updatePost(captionValue, postId));
+    dispatch(updatePost(captionValue, postId, detailValue, carNameValue, moneyValue, toValue, fromValue));
     dispatch(getMyPosts());
   };
 
@@ -82,6 +103,7 @@ const Post = ({
     dispatch(getMyPosts());
     dispatch(loadUser());
   };
+ 
 
   useEffect(() => {
     likes.forEach((item) => {
@@ -91,6 +113,14 @@ const Post = ({
     });
   }, [likes, user._id]);
 
+
+  function selectTimeslots(values) {
+    // setTo(moment(values[0]));
+    setToValue(moment(values[0]).format('MMM DD yyyy'))
+    // setFrom(moment(values[1]));
+    setFromValue(moment(values[1]).format('MMM DD yyyy'))
+
+    }
   return (
     <div className="post">
       <div className="postHeader">
@@ -99,11 +129,7 @@ const Post = ({
             <MoreVert />
           </Button>
         ) : null}
-        {isAccount ? (
-          <Button onClick={() => setDetailToggle(!detailToggle)}>
-            <MoreVert />
-          </Button>
-        ) : null}
+        
       </div>
 
       <img src={postImage} alt="Post" />
@@ -123,46 +149,26 @@ const Post = ({
         </Link>
         <Typography
           fontWeight={500}
-          color="rgba(0, 0, 0, 0.582)"
+          color="rgba(255, 99, 71, 1)"
           style={{ alignSelf: "center" }}
         >
           {caption}
         </Typography>
-        
         <Typography
-          fontWeight={100}
+          fontWeight={500}
           color="rgba(0, 0, 0, 0.582)"
           style={{ alignSelf: "center" }}
+          type="date"
         >
        
         </Typography>
-        
+  
       </div>
-      <div>Ten xe: 
-        <Typography
-          fontWeight={500}
-          color="rgba(0, 0, 0, 0.582)"
-          style={{ alignSelf: "center" }}
-        >
-          {carName}
-        </Typography></div>
-      <div>Chi tiết về xe: <Typography
-          
-          fontWeight={100}
-          color="rgba(0, 0, 0, 0.582)"
-          style={{ alignSelf: "center" }}
-        >
-         {detail}
-        </Typography></div>
-        <div>
-        <Typography
-          fontWeight={500}
-          color="rgba(0, 0, 0, 0.582)"
-          style={{ alignSelf: "center" }}
-        >
-          Giá thuê xe/Ngày: {money} VND
-        </Typography>
-        </div>
+      <div className="d1">Tên xe:   {carName}</div>
+      <div className="d1">Chi tiết về xe:   {detail}</div>
+      <div class="d1">Giá thuê xe/Ngày:   {money} VND</div>
+      <RangePicker />
+      <div class="d1">Thời gian cho thuê:  {Object.values(timeSlots)}</div>
       <button
         style={{
           border: "none",
@@ -190,6 +196,10 @@ const Post = ({
             <DeleteOutline />
           </Button>
         ) : null}
+        <Button onClick={messageHandler}> 
+              <Link to={'/messenger'}><MobileScreenShareTwoToneIcon/></Link>
+          </Button>
+          
       </div>
 
       <Dialog open={likesUser} onClose={() => setLikesUser(!likesUser)}>
@@ -253,44 +263,71 @@ const Post = ({
       >
         <div className="DialogBox">
           <Typography variant="h4">Update Caption</Typography>
-
-          <form className="commentForm" onSubmit={updateCaptionHandler}>
-            <input
+            <form onSubmit={updateCaptionHandler} className="f1">
+               Caption:
+            <form className="commentForm" onSubmit={updateCaptionHandler}>
+            
+           <input
               type="text"
               value={captionValue}
               onChange={(e) => setCaptionValue(e.target.value)}
               placeholder="Caption Here..."
               required
-            />
-
-            <Button type="submit" variant="contained">
+            /> 
+          </form>
+          Detail:
+          <form className="commentForm">
+            
+          <input
+            type="text"
+            value={detailValue}
+            onChange={(e) => setDetailValue(e.target.value)}
+            placeholder="Detail Here..."
+            required
+            
+          />
+            
+          </form>
+          Car name:
+          <form className="commentForm" top={-50}>
+          <input
+            type="text"
+            value={carNameValue}
+            onChange={(e) => setCarNameValue(e.target.value)}
+            placeholder="Car name here..."
+            required
+            
+          />
+          
+          </form>
+          Money:
+          <form className="commentForm" >
+          <input
+            type="number"
+            value={moneyValue}
+            onChange={(e) => setMoneyValue(e.target.value)}
+            placeholder="Money here..."
+            required
+            
+          />
+         
+          </form>
+          Thời gian cho thuê: 
+          <form className="commentForm">
+          
+          <Space direction="vertical" size={12} >
+        <RangePicker format='MMM DD yyyy' onChange={selectTimeslots} className="t1" />
+        </Space>
+          </form>
+          <Button type="submit" variant="contained" className="dat">
               Update
             </Button>
+
           </form>
+          
         </div>
       </Dialog>
-      <Dialog
-        open={detailToggle}
-        onClose={() => setDetailToggle(!detailToggle)}
-      >
-        <div className="DialogBox">
-          <Typography variant="h4">Update Detail</Typography>
-
-          <form className="commentForm" onSubmit={updateCaptionHandler}>
-            <input
-              type="text"
-              value={detailValue}
-              onChange={(e) => setCaptionValue(e.target.value)}
-              placeholder="Detail Here..."
-              required
-            />
-
-            <Button type="submit" variant="contained">
-              Update
-            </Button>
-          </form>
-        </div>
-      </Dialog>
+      
     </div>
   );
 };

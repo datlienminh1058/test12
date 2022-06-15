@@ -6,17 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { createNewPost } from "../../Actions/Post";
 import { loadUser } from "../../Actions/User";
 import "./NewPost.css";
-import './DayPicker.css'
 import moment from "moment";
-import {DatePicker, Space} from 'antd'
-
+import {Col, DatePicker, Row, Space} from 'antd'
+import 'antd/dist/antd.css';
 const {RangePicker} = DatePicker
 
 const NewPost = () => {
   const [image, setImage] = useState(null);
   const [caption, setCaption] = useState("");
   const [detail, setDetail] = useState("");
-  const [to, setTo] = useState("");
+  const [to, setTo] = useState();
   const [from, setFrom] = useState();
   const [carName, setCarName] = useState("");
   const { loading, error, message } = useSelector((state) => state.like);
@@ -78,31 +77,31 @@ const NewPost = () => {
           placeholder="Caption..."
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
+          required
         />
         <input
           type="text"
           placeholder="Ten xe"
           value={carName}
           onChange={(e) => setCarName(e.target.value)}
+          required
         />
         <input
         type="text"
         placeholder="Detail..."
         value={detail}
         onChange={(e) => setDetail(e.target.value)}
+        required
         />
         <input
           type="number"
-          placeholder="Tien Te"
+          placeholder="Số tiền cho thuê/Ngày...VND"
           value={money}
           onChange={(e) => setMoney(e.target.value)}
+          required
         />
-        
-
-        <Space direction="vertical" size={12}>Thoi gian cho thue
-        <RangePicker format='MMM DD yyyy HH:mm' onChange={selectTimeslots} />
-        </Space>
-        
+        <br/>
+        <div className="d1" required>Thời gian cho thuê: <RangePicker format='MMM DD yyyy' onChange={selectTimeslots} /></div>
         <Button disabled={loading} type="submit">
           Post
         </Button>

@@ -55,11 +55,11 @@ const Home = () => {
               postId={post._id}
               caption={post.caption}
               detail={post.detail}
-              to={post.to}
-              from={post.from}
-              timeSlots={post?.timeSlots}
+              // to={post.to}
+              // from={post.from}
+              timeSlots={post.timeSlots}
               carName={post.carName}
-              money={post?.money}
+              money={post.money}
               postImage={post.image.url}
               likes={post.likes}
               comments={post.comments}

@@ -103,7 +103,7 @@ export const createNewPost = (caption, image, detail, to, from, money, carName) 
   }
 };
 
-export const updatePost = (caption, id) => async (dispatch) => {
+export const updatePost = (caption, id, detail, carName, money, to, from) => async (dispatch) => {
   try {
     dispatch({
       type: "updateCaptionRequest",
@@ -113,6 +113,12 @@ export const updatePost = (caption, id) => async (dispatch) => {
       `/api/v1/post/${id}`,
       {
         caption,
+        detail,
+        carName,
+        money,
+        timeSlots : {
+          to, from
+        }
       },
       {
         headers: {
