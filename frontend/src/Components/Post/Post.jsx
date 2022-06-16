@@ -58,7 +58,7 @@ const Post = ({
   const [toValue, setToValue] = useState(to);
   const [fromValue, setFromValue] = useState(from);
 
-  
+  const dateFormat = 'MMM DD yyyy';
  
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -166,9 +166,16 @@ const Post = ({
       </div>
       <div className="d1">Tên xe:   {carName}</div>
       <div className="d1">Chi tiết về xe:   {detail}</div>
-      <div class="d1">Giá thuê xe/Ngày:   {money} VND</div>
-      <RangePicker />
-      <div class="d1">Thời gian cho thuê:  {Object.values(timeSlots)}</div>
+      <div className="d1">Giá thuê xe/Ngày:   {money} VND</div>
+      <div className="d1">
+      <Space direction="vertical" size={12}>
+      <RangePicker
+      defaultValue={[moment(timeSlots.to, dateFormat), moment(timeSlots.from, dateFormat)]}
+      disabled
+       />
+      </Space>
+      </div>
+      {/* <div class="d1">Thời gian cho thuê:  {Object.values(timeSlots)}</div> */}
       <button
         style={{
           border: "none",

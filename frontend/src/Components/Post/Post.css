@@ -9,6 +9,7 @@
   .d1{
     margin-left: 5vmax;
     font-weight: 500;
+    padding: 5px;
   }
   .postHeader {
     display: flex;
@@ -35,9 +36,6 @@
     color: rgb(0, 0, 0);
     margin: 1vmax;
   }
-
-
-
   
   .postFooter > button {
     color: rgba(0, 0, 0, 0.767);

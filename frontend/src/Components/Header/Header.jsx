@@ -12,9 +12,14 @@ import {
   AccountCircleOutlined,
   Chat,
   ChatOutlined,
+  NotificationImportant,
+  NotificationImportantOutlined,
+  
 } from "@mui/icons-material";
+import { Button, Dialog, Menu, MenuList } from "@mui/material";
 
 const Header = () => {
+  const [notifications, setNotifications] = useState(false);
   const [tab, setTab] = useState(window.location.pathname);
   return (
     <div className="header">
@@ -52,6 +57,14 @@ const Header = () => {
           <ChatOutlined />
         )}
       </Link>
+      
+      <Button onClick={() => setNotifications(!notifications)}>
+          <NotificationImportant/>
+
+      </Button>
+      <Dialog open={notifications} onClose={() => setNotifications(!notifications)} >
+          <div> Helllo </div>
+      </Dialog>
 
     </div>
   );

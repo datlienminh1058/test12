@@ -25,6 +25,8 @@ const io = require('socket.io')(8900,{
   io.sockets.on("connection",function (socket) {
     //when ceonnect
     console.log("a user connected." + socket.id);
+
+    
   
     //take userId and socketId from user
     socket.on("addUser", (userId) => {
@@ -44,6 +46,8 @@ const io = require('socket.io')(8900,{
         console.log('sai roi');
       }
     });
+
+  
   
     //when disconnect
     socket.on("disconnect", () => {

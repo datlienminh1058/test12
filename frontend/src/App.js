@@ -17,6 +17,7 @@ import UserProfile from './Components/UserProfile/UserProfile'
 import Search from './Components/Search/Search'
 import NotFound from './Components/NotFound/NotFound'
 import Messenger from './Components/Messenger/Messenger'
+import Notification from './Components/Notification/Notification'
 
 
 const App = () => {
@@ -48,6 +49,7 @@ const App = () => {
         <Route path='search' element={ isAuthenticated ? <Search /> : <Login />} />
         <Route path='*' element={<NotFound />} />
         <Route path='/messenger' element={isAuthenticated ? <Messenger /> : <Login />} />
+        <Route path='/notification' element={ isAuthenticated ? <Notification /> : <Login />}/>
       </Routes>
  
     </Router>

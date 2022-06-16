@@ -22,7 +22,6 @@ const Messenger = () => {
   // const {user} = useContext(AuthContext);
   const {user} = useSelector((state) => state.user);
   const scrollRef = useRef();
-<script src="/socket.io/socket.io.js"></script>
   useEffect(() => { 
     socket.current = io("ws://localhost:8900");
     socket.current.on("getMessage", data => {
